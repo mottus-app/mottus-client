@@ -1,0 +1,12 @@
+name: Notify on Issue
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  slack-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack Message
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"WEB issue ${{ github.event.issue.number }}<${{ github.event.issue.html_url }}|#${{ github.event.issue.title}}.>"} was closed' ${{ secrets.SLACK_ISSUE_BOT }}
