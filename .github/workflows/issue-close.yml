@@ -1,10 +1,10 @@
-name: Notify on Issue
+name: Closing Issue
 on:
   issues:
     types: [closed]
 
 jobs:
-  slack-message:
+  slack-message-on-issue-close:
     runs-on: ubuntu-latest
     steps:
       - name: Slack Message
