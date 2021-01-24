@@ -1,8 +1,14 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { Box, Flex, Heading, Link, Text, Code } from "@chakra-ui/react";
+import { useHelloQuery } from "../graphql/generated";
+import { withApollo } from "../apollo/new";
+import getStaticApolloProps from "../apollo/new/getStaticApolloProps";
 
-export default function Home() {
+function Home() {
+  const { data } = useHelloQuery();
+  console.log("data:", data);
+  if (!data?.hello) return null;
   return (
     <Box
       as="main"
@@ -18,6 +24,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <h1>{data.hello}</h1>
       <main className={styles.main}>
         <Heading as="h1" m="0" fontSize="6xl" textAlign="center" lineHeight="5">
           Welcome to{" "}
@@ -94,3 +101,7 @@ export default function Home() {
     </Box>
   );
 }
+
+export default withApollo({ ssr: false })(Home);
+
+export const getStaticProps = getStaticApolloProps<{}, {}>(Home);
