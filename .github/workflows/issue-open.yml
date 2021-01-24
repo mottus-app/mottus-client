@@ -4,9 +4,17 @@ on:
     types: [opened, reopened]
 
 jobs:
-  slack-message:
+  slack-message-on-open:
     runs-on: ubuntu-latest
+    if: github.event_name == 'opened'
     steps:
       - name: Slack Message
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"WEB new issue created: ${{ github.event.issue.number }}<${{ github.event.issue.html_url }}|#${{ github.event.issue.title}}.>"}' ${{ secrets.SLACK_ISSUE_BOT }}
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"WEB new issue created: <${{ github.event.issue.html_url }}|#${{ github.event.issue.number }}${{ github.event.issue.title}}.>"}' ${{ secrets.SLACK_ISSUE_BOT }}
+  slack-message-on-reopen:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'reopened'
+    steps:
+      - name: Slack Message
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"WEB issue #${{ github.event.issue.number }} was reopened: <${{ github.event.issue.html_url }}|#${{ github.event.issue.number }}${{ github.event.issue.title}}.>"}' ${{ secrets.SLACK_ISSUE_BOT }}
